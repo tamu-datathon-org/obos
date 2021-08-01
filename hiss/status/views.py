@@ -34,7 +34,7 @@ class StatusView(mixins.LoginRequiredMixin, generic.TemplateView):
                 context["application"] = app
             elif app_status == application_models.STATUS_REJECTED:
                 context["REJECTED"] = True
-            elif app_status == application_models.STATUS_ADMITTED:
+            elif app_status == application_models.STATUS_ADMITTED or app_status == application_models.STATUS_ADMITTED_VIRTUAL:
                 context["NEEDS_TO_CONFIRM"] = True
                 context["application"] = app
                 context["confirmation_deadline"] = app.confirmation_deadline

@@ -254,6 +254,14 @@ SHIRT_SIZES = [
     (UNISEX_XXL, "Unisex XXL"),
 ]
 
+PREFERS_IN_PERSON="prefers_in_person"
+PREFERS_VIRTUAL="prefers_virtual"
+
+LOCATION_PREF = [
+    (PREFERS_IN_PERSON, "Prefer participating in person"),
+    (PREFERS_VIRTUAL, "Prefer participating virtually"),
+]
+
 STATUS_PENDING = "P"
 """Status given to a submitted (but unreviewed) application.."""
 
@@ -420,11 +428,6 @@ class Application(models.Model):
         choices=AGREE,
         default=None,
     )
-    agree_to_privacy = models.BooleanField(
-        choices=AGREE,
-        default=None,
-        help_text="We need your authorization to share your application / registration information for event administration, ranking, MLH administration, pre and post-event informational e-mails, and occasional messages about hackathons, in-line with the MLH Privacy Policy.",
-    )
     is_adult = models.BooleanField(
         "I am 18 years old or older.",
         choices=AGREE,
@@ -440,11 +443,14 @@ class Application(models.Model):
         "other-physical-location", max_length=20, null=True, blank=True
     )
 
+    location_preference = models.CharField(
+        "Location Preference", choices=LOCATION_PREF, max_length=24, default=PREFERS_IN_PERSON
+    )
     shirt_size = models.CharField(
         "What size shirt do you wear?", choices=SHIRT_SIZES, max_length=4
     )
     transport_needed = models.CharField(
-        "How will you be getting to the event?", choices=TRANSPORT_MODES, max_length=11
+        "How will you be getting to the event?", choices=TRANSPORT_MODES, max_length=50, blank=True
     )
     travel_reimbursement = models.BooleanField(
         "I'd like to apply for travel reimbursement",

@@ -234,11 +234,8 @@ class ApplicationModelForm(forms.ModelForm):
         ("other", "Other"),
     )
     location_preference = forms.ChoiceField(
-        label="Would you prefer to participate in-person or virtually?", choices=[
-            ("", "---------"),
-            ("prefers_in_person", "Prefer participating in person"),
-            ("prefers_virtual", "Prefer participating virtually"),
-        ],
+        label="Would you prefer to participate in-person or virtually?",
+        choices=[("", "---------")]+models.LOCATION_PREF,
         help_text="We will try our best to let people that want to participate in person come in person. In person spots are limited, so you might be accepted to participate virtually even if you select that your prefer to participate in person."
     )
     physical_location = forms.ChoiceField(

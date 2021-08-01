@@ -23,6 +23,7 @@ from application.models import (
     Application,
     Wave,
     STATUS_ADMITTED,
+    STATUS_ADMITTED_VIRTUAL,
     STATUS_REJECTED,
     STATUS_CONFIRMED,
     RACES,
@@ -90,7 +91,26 @@ def approve(_modeladmin, _request: HttpRequest, queryset: QuerySet) -> None:
             deadline = timezone.now().replace(
                 hour=23, minute=59, second=59, microsecond=0
             ) + timezone.timedelta(application.wave.num_days_to_rsvp)
-            application.status = STATUS_CONFIRMED
+            application.status = STATUS_ADMITTED
+            application.confirmation_deadline = deadline
+            #email_tuples.append(build_approval_email(application, deadline))
+            application.save()
+    #send_mass_html_mail(email_tuples)
+
+def approve_virtual(_modeladmin, _request: HttpRequest, queryset: QuerySet) -> None:
+    """
+    Sets the value of the `approved` field for the selected `Application`s to `True`, creates an RSVP deadline for
+    each user based on how many days each wave gives to RSVP, and then emails all of the users to inform them that
+    their applications have been approved.
+    """
+    # HACK: Removing auto-emailing for TAMU Datathon 2020 as we're sending emails manually.
+    #email_tuples = []
+    with transaction.atomic():
+        for application in queryset:
+            deadline = timezone.now().replace(
+                hour=23, minute=59, second=59, microsecond=0
+            ) + timezone.timedelta(application.wave.num_days_to_rsvp)
+            application.status = STATUS_ADMITTED_VIRTUAL
             application.confirmation_deadline = deadline
             #email_tuples.append(build_approval_email(application, deadline))
             application.save()
@@ -244,9 +264,15 @@ class RaceFilter(admin.SimpleListFilter):
 class ApplicationAdmin(admin.ModelAdmin):
     form = ApplicationAdminForm
     readonly_fields = [
+        "first_name",
+        "last_name",
         "datetime_submitted",
         "user",
         "is_adult",
+        "location_preference",
+        "transport_needed",
+        "travel_reimbursement",
+        "dietary_restrictions",
         "gender",
         "age",
         "race",
@@ -282,6 +308,7 @@ class ApplicationAdmin(admin.ModelAdmin):
         ("classification", ChoiceDropdownFilter),
         ("gender", ChoiceDropdownFilter),
         ("grad_year", ChoiceDropdownFilter),
+        ("location_preference", ChoiceDropdownFilter),
         ("referral", ChoiceDropdownFilter),
         ("physical_location", ChoiceDropdownFilter),
         ("num_hackathons_attended", ChoiceDropdownFilter),
@@ -294,6 +321,7 @@ class ApplicationAdmin(admin.ModelAdmin):
         "first_name",
         "last_name",
         "school",
+        "location_preference",
         "user_email",
         "datetime_submitted",
         "classification",
@@ -329,6 +357,17 @@ class ApplicationAdmin(admin.ModelAdmin):
             },
         ),
         (
+            "Logistics Information",
+            {
+                "fields": [
+                    "location_preference",
+                    "transport_needed",
+                    "travel_reimbursement",
+                    "dietary_restrictions",
+                ]
+            },
+        ),
+        (
             "Demographic Information",
             {
                 "fields": [
@@ -358,14 +397,15 @@ class ApplicationAdmin(admin.ModelAdmin):
     ]
     list_per_page = 2000
 
-    approve.short_description = "Approve Selected Applications"
+    approve.short_description = "Accept Selected Applications for In-Person"
+    approve_virtual.short_description = "Accept Selected Applications for Virtual"
     reject.short_description = "Reject Selected Applications"
     export_applicant_data.short_description = "Export Data for Selected Applicants"
     resend_confirmation.short_description = (
         "Resend Confirmation to Selected Applications"
     )
 
-    actions = [approve, reject, export_applicant_data, resend_confirmation]
+    actions = [approve, approve_virtual, reject, export_applicant_data, resend_confirmation]
 
     def has_add_permission(self, request):
         return True

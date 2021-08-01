@@ -47,9 +47,9 @@ class UserAdmin(admin.ModelAdmin):
         "has_applied",
     )
     list_filter = ("is_active", "is_staff", HasAppliedFilter)
-    readonly_fields = ("email", "password")
+    readonly_fields = ("email", "password", "auth_id")
     fieldsets = [
-        ("User Information", {"fields": ["email", "password"]}),
+        ("User Information", {"fields": ["email", "password", "auth_id"]}),
         (
             "Advanced",
             {
