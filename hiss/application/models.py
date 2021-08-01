@@ -262,6 +262,14 @@ LOCATION_PREF = [
     (PREFERS_VIRTUAL, "Prefer participating virtually"),
 ]
 
+FULLY_VACCINATED="fully_vaccinated"
+NOT_VACCINATED="not_vaccinated"
+
+VACCINATION_STATUS = [
+    (FULLY_VACCINATED, "Fully vaccinated for COVID-19"),
+    (NOT_VACCINATED, "Not vaccinated for COVID-19"),
+]
+
 STATUS_PENDING = "P"
 """Status given to a submitted (but unreviewed) application.."""
 
@@ -446,6 +454,11 @@ class Application(models.Model):
     location_preference = models.CharField(
         "Location Preference", choices=LOCATION_PREF, max_length=24, default=PREFERS_IN_PERSON
     )
+
+    covid_status = models.CharField(
+        "What is your COVID-19 vaccination status?", choices=VACCINATION_STATUS, max_length=24, default=PREFERS_IN_PERSON, blank=True
+    )
+
     shirt_size = models.CharField(
         "What size shirt do you wear?", choices=SHIRT_SIZES, max_length=4
     )

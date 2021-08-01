@@ -238,6 +238,10 @@ class ApplicationModelForm(forms.ModelForm):
         choices=[("", "---------")]+models.LOCATION_PREF,
         help_text="We will try our best to let people that want to participate in person come in person. In person spots are limited, so you might be accepted to participate virtually even if you select that your prefer to participate in person."
     )
+    covid_status = forms.ChoiceField(
+        label="What is your COVID-19 vaccination status?",
+        choices=[("", "---------")]+models.VACCINATION_STATUS,
+    )
     physical_location = forms.ChoiceField(
         label="If you were to participate virtually, where will you participate from?", choices=STATES
     )
@@ -437,6 +441,7 @@ class ApplicationModelForm(forms.ModelForm):
             "school_other",
             "first_generation",
             "location_preference",
+            "covid_status",
             "transport_needed",
             "travel_reimbursement",
             "dietary_restrictions",

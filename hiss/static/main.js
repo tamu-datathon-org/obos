@@ -15,7 +15,7 @@ $(document).ready(function() {
     $("#id_last_name").parent().append(linksHeaderNode);
 
     const indentedInputClass = "indented-input";
-    const linkInputIds = ["id_github_link", "id_linkedin_link", "id_personal_website_link", "id_instagram_link", "id_devpost_link", "id_transport_needed", "id_travel_reimbursement", "id_dietary_restrictions", "id_additional_accommodations", "id_physical_location_other"];
+    const linkInputIds = ["id_github_link", "id_linkedin_link", "id_personal_website_link", "id_instagram_link", "id_devpost_link", "id_transport_needed", "id_travel_reimbursement", "id_dietary_restrictions", "id_additional_accommodations", "id_physical_location_other", "id_covid_status"];
     linkInputIds.forEach(id => $(`#${id}`).parent().addClass(indentedInputClass));
 
     if (!$('#id_race input[value="O"]')[0].checked) {
@@ -60,12 +60,11 @@ $(document).ready(function() {
         "#id_transport_needed",
         "#id_travel_reimbursement",
         "#id_dietary_restrictions",
-        "#id_additional_accommodations"
+        "#id_additional_accommodations",
+        "#id_covid_status"
     ]
 
-    inPersonQuestions.forEach(id => $(id).parent().hide());
-
-    $('#id_location_preference').on('change', function(){
+    function determine() {
         let selection = $('#id_location_preference option:selected').val();
         if (selection === "prefers_in_person"){
             console.log("show")
@@ -75,6 +74,12 @@ $(document).ready(function() {
             console.log("hide")
             inPersonQuestions.forEach(id => $(id).parent().hide())
         }
+    }
+
+    determine();
+
+    $('#id_location_preference').on('change', function(){
+        determine();
     });
 
     if($("#id_interesting_industries").val().includes("other")) {
