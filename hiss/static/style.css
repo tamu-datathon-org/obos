@@ -723,6 +723,8 @@ label.required-form-input:after {
 }
 
 label[for="id_agree_to_mlh_policies"],
+label[for="id_agree_to_td_policies"],
+label[for="id_travel_reimbursement"],
 label[for="id_agree_to_privacy"],
 label[for="id_first_generation"],
 label[for="id_is_adult"] {
@@ -730,6 +732,8 @@ label[for="id_is_adult"] {
 }
 
 #id_agree_to_mlh_policies,
+#id_agree_to_td_policies,
+#id_travel_reimbursement,
 #id_agree_to_privacy,
 #id_first_generation,
 #id_is_adult {
@@ -738,6 +742,8 @@ label[for="id_is_adult"] {
 
 #id_is_adult ~ .helptext,
 #id_agree_to_mlh_policies ~ .helptext,
+#id_agree_to_td_policies ~ .helptext,
+#id_travel_reimbursement ~ .helptext,
 #id_agree_to_privacy ~ .helptext  {
     margin-top: -30px;
     margin-left: 45px;
@@ -1027,6 +1033,8 @@ button {
 
 @media only screen and (max-width: 390px ) {
     #id_agree_to_mlh_policies,
+    #id_agree_to_td_policies,
+    #id_travel_reimbursement,
     #id_agree_to_privacy,
     #id_is_adult,
     #id_first_generation {

@@ -109,6 +109,26 @@ GENDERS: List[Tuple[str, str]] = [
     (GENDER_OTHER, "Prefer to self-describe"),
 ]
 
+DRIVING = "D"
+EVENT_PROVIDED_BUS = "B"
+EVENT_PROVIDED_BUS_UT = "BUT"
+EVENT_PROVIDED_BUS_UTD = "BUTD"
+EVENT_PROVIDED_BUS_UTA = "BUTA"
+EVENT_PROVIDED_BUS_UTSA = "BUTSA"
+EVENT_PROVIDED_BUS_UTRGV = "BUTRGV"
+OTHER_BUS = "OB"
+FLYING = "F"
+PUBLIC_TRANSPORTATION = "P"
+MANUAL_POWER = "M"
+
+TRANSPORT_MODES: List[Tuple[str, str]] = [
+    (DRIVING, "Driving"),
+    (OTHER_BUS, "Bus (Greyhound, Megabus, etc.)"),
+    (FLYING, "Flying"),
+    (PUBLIC_TRANSPORTATION, "Public Transportation"),
+    (MANUAL_POWER, "Walking/Biking"),
+]
+
 AMERICAN_INDIAN = "AI"
 ASIAN = "AS"
 BLACK = "BL"
@@ -126,6 +146,26 @@ RACES: List[Tuple[str, str]] = [
     (WHITE, "White"),
     (NO_ANSWER, "Prefer not to answer"),
     (RACE_OTHER, "Prefer to self-describe"),
+]
+
+NONE = "None"
+VEGETARIAN = "Vegetarian"
+VEGAN = "Vegan"
+HALAL = "Halal"
+KOSHER = "Kosher"
+GLUTEN_FREE = "Gluten-free"
+FOOD_ALLERGY = "Food allergy"
+DIETARY_RESTRICTION_OTHER = "Other"
+
+DIETARY_RESTRICTIONS: List[Union[Tuple[str, None], Tuple[str, str]]] = [
+    (NONE, None),
+    (VEGAN, "Vegan"),
+    (VEGETARIAN, "Vegetarian"),
+    (HALAL, "Halal"),
+    (KOSHER, "Kosher"),
+    (GLUTEN_FREE, "Gluten-free"),
+    (FOOD_ALLERGY, "Food allergy"),
+    (DIETARY_RESTRICTION_OTHER, "Other"),
 ]
 
 FRESHMAN = "Fr"
@@ -220,6 +260,7 @@ STATUS_PENDING = "P"
 STATUS_REJECTED = "R"
 """Status given to a rejected application."""
 
+STATUS_ADMITTED_VIRTUAL = "V"
 STATUS_ADMITTED = "A"
 """Status given to an approved application."""
 
@@ -238,7 +279,8 @@ STATUS_EXPIRED = "E"
 STATUS_OPTIONS = [
     (STATUS_PENDING, "Under Review"),
     (STATUS_REJECTED, "Waitlisted"),
-    (STATUS_ADMITTED, "Admitted"),
+    (STATUS_ADMITTED_VIRTUAL, "Admitted for Virtual"),
+    (STATUS_ADMITTED, "Admitted for In Person"),
     (STATUS_CONFIRMED, "Confirmed"),
     (STATUS_DECLINED, "Declined"),
     (STATUS_CHECKED_IN, "Checked in"),
@@ -374,17 +416,20 @@ class Application(models.Model):
         default=None,
         help_text="Being an MLH event, we need participants to be familiar with the MLH Code of Conduct and the MLH Contest Terms and Conditions.",
     )
+    agree_to_td_policies = models.BooleanField(
+        choices=AGREE,
+        default=None,
+    )
     agree_to_privacy = models.BooleanField(
         choices=AGREE,
         default=None,
         help_text="We need your authorization to share your application / registration information for event administration, ranking, MLH administration, pre and post-event informational e-mails, and occasional messages about hackathons, in-line with the MLH Privacy Policy.",
     )
     is_adult = models.BooleanField(
-        "Please confirm you are 18 or older.",
+        "I am 18 years old or older.",
         choices=AGREE,
         default=None,
-        help_text="Please note that freshmen under 18 must be accompanied by an adult or prove that they go to Texas "
-        "A&M.",
+        help_text="Please note that freshmen under 18 must be accompanied by an adult or prove that they go to Texas A&M University. Contact us at connect@tamudatathon.com if you have any questions.",
     )
 
     # LOGISTICAL INFO
@@ -394,6 +439,30 @@ class Application(models.Model):
     physical_location_other = models.CharField(
         "other-physical-location", max_length=20, null=True, blank=True
     )
+
+    shirt_size = models.CharField(
+        "What size shirt do you wear?", choices=SHIRT_SIZES, max_length=4
+    )
+    transport_needed = models.CharField(
+        "How will you be getting to the event?", choices=TRANSPORT_MODES, max_length=11
+    )
+    travel_reimbursement = models.BooleanField(
+        "I'd like to apply for travel reimbursement",
+        default=False,
+        help_text="Travel reimbursement is only provided if you stay the whole time and submit a project.",
+    )
+    additional_accommodations = models.TextField(
+        "Do you require any special accommodations at the event?",
+        max_length=500,
+        blank=True,
+    )
+    dietary_restrictions = models.CharField(
+        "Do you have any dietary restrictions?",
+        choices=DIETARY_RESTRICTIONS,
+        max_length=50,
+        default=NONE,
+    )
+    
 
     # CONFIRMATION DEADLINE
     confirmation_deadline = models.DateTimeField(null=True, blank=True)

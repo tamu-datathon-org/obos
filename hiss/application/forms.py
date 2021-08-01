@@ -1,5 +1,6 @@
 from django import forms
 from django.utils.safestring import mark_safe
+from django.conf import settings
 import ast
 
 from application import models as application_models, models
@@ -232,8 +233,16 @@ class ApplicationModelForm(forms.ModelForm):
         ("Wyoming", "Wyoming"),
         ("other", "Other"),
     )
+    location_preference = forms.ChoiceField(
+        label="Would you prefer to participate in-person or virtually?", choices=[
+            ("", "---------"),
+            ("prefers_in_person", "Prefer participating in person"),
+            ("prefers_virtual", "Prefer participating virtually"),
+        ],
+        help_text="We will try our best to let people that want to participate in person come in person. In person spots are limited, so you might be accepted to participate virtually even if you select that your prefer to participate in person."
+    )
     physical_location = forms.ChoiceField(
-        label="Where will you be participating from?", choices=STATES
+        label="If you were to participate virtually, where will you participate from?", choices=STATES
     )
     physical_location_other = forms.CharField(
         label="If your location wasn't included in the options above, please elaborate.",
@@ -245,13 +254,14 @@ class ApplicationModelForm(forms.ModelForm):
         ("0", "None"),
         ("1", "Dabbled here and there"),
         ("2", "Some side projects and/or classes"),
-        ("3", "Data science specific internship"),
+        ("3", "Data science/Machine Learning specific internship"),
         ("4", "Years of industry experience"),
     )
     datascience_experience = forms.ChoiceField(
-        label="How would you rank your experience with data science?",
+        label="How would you rank your experience with data science or machine learning?",
         choices=DATASCIENCE_EXPERIENCE,
     )
+
     TECHNOLOGY_EXPERIENCE = (
         ("Excel", "Excel"),
         ("Python", "Python"),
@@ -316,10 +326,15 @@ class ApplicationModelForm(forms.ModelForm):
 
         super().__init__(*args, **kwargs)
         self.fields["agree_to_mlh_policies"].label = mark_safe(
-            'I have read and agree to the <a target="_blank" href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">MLH Code of Conduct</a> and the <a target="_blank" href="https://github.com/MLH/mlh-policies/blob/master/prize-terms-and-conditions/contest-terms.md">MLH Contest Terms and Conditions</a>.'
+            f"I authorize {settings.EVENT_NAME} to share my application/registration information for"
+            " event administration, ranking, MLH administration, pre- and post-event informational e-mails,"
+            'and occasional messages about hackathons in-line with the <a href="https://mlh.io/privacy" target="_blank">MLH'
+            ' Privacy Policy</a>. I further agree to the terms of both the <a href="https://github.com/MLH'
+            '/mlh-policies/tree/master/prize-terms-and-conditions" target="_blank">MLH Contest Terms and Conditions</a>'
+            ' and the <a href="https://mlh.io/privacy" target="_blank">MLH Privacy Policy</a>'
         )
-        self.fields["agree_to_privacy"].label = mark_safe(
-            'I have read and agree to the <a target="_blank" href="https://mlh.io/privacy">MLH Privacy Policy</a>.'
+        self.fields["agree_to_td_policies"].label = mark_safe(
+            f"""I agree to TAMU Datathon's <a href="https://tamudatathon.com/legal/talent_liability_terms" target="_blank">Talent Release and Liability terms</a>."""
         )
         self.fields["first_generation"].label = mark_safe(
             "I am a first generation college student."
@@ -384,6 +399,7 @@ class ApplicationModelForm(forms.ModelForm):
         widgets = {
             "is_adult": forms.CheckboxInput,
             "agree_to_mlh_policies": forms.CheckboxInput,
+            "agree_to_td_policies": forms.CheckboxInput,
             "agree_to_privacy": forms.CheckboxInput,
             "first_generation": forms.CheckboxInput,
             "extra_links": forms.Textarea(
@@ -418,10 +434,16 @@ class ApplicationModelForm(forms.ModelForm):
             "devpost_link",
             "resume",
             "referral",
-            "volunteer",
+            "shirt_size",
+            "volunteer", # mentor
             "school",
             "school_other",
             "first_generation",
+            "location_preference",
+            "transport_needed",
+            "travel_reimbursement",
+            "dietary_restrictions",
+            "additional_accommodations",
             "physical_location",
             "physical_location_other",
             "majors",
@@ -445,6 +467,6 @@ class ApplicationModelForm(forms.ModelForm):
             "interesting_industries",
             "industries_other",
             "agree_to_mlh_policies",
-            "agree_to_privacy",
+            "agree_to_td_policies",
             "is_adult",
         ]

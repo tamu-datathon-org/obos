@@ -1,17 +1,21 @@
 $(document).ready(function() {
     const optionalQuestionsNode = 
-        `<h6 style="color:#4286f3; padding: 1em 0em 1em 0em;">
+        `<hr/>
+        <h6 style="color:#4286f3; padding: 1em 0em 1em 0em;">
             The following questions are optional. Scroll down to submit your application, or continue to help us improve the event!
         </h6>`;
     // Insert header after shirt_size question.
     $("#id_datascience_experience").parent().append(optionalQuestionsNode);
+
+    // Insert hr above agree checkboxes
+    $("#id_agree_to_mlh_policies").parent().prepend("<hr/>");
 
     const linksHeaderNode = `<h6 style="color: #000; padding: 2em 0em 1em 0em;">Do you have any of the following links to give us?</h6>`;
     // Insert header after last_name question.
     $("#id_last_name").parent().append(linksHeaderNode);
 
     const indentedInputClass = "indented-input";
-    const linkInputIds = ["id_github_link", "id_linkedin_link", "id_personal_website_link", "id_instagram_link", "id_devpost_link"];
+    const linkInputIds = ["id_github_link", "id_linkedin_link", "id_personal_website_link", "id_instagram_link", "id_devpost_link", "id_transport_needed", "id_travel_reimbursement", "id_dietary_restrictions", "id_additional_accommodations", "id_physical_location_other"];
     linkInputIds.forEach(id => $(`#${id}`).parent().addClass(indentedInputClass));
 
     if (!$('#id_race input[value="O"]')[0].checked) {
@@ -50,6 +54,27 @@ $(document).ready(function() {
          else{
              $('#id_school_other').parent().hide();
          }
+    });
+
+    const inPersonQuestions = [
+        "#id_transport_needed",
+        "#id_travel_reimbursement",
+        "#id_dietary_restrictions",
+        "#id_additional_accommodations"
+    ]
+
+    inPersonQuestions.forEach(id => $(id).parent().hide());
+
+    $('#id_location_preference').on('change', function(){
+        let selection = $('#id_location_preference option:selected').val();
+        if (selection === "prefers_in_person"){
+            console.log("show")
+            inPersonQuestions.forEach(id => $(id).parent().show())
+        }
+        else{
+            console.log("hide")
+            inPersonQuestions.forEach(id => $(id).parent().hide())
+        }
     });
 
     if($("#id_interesting_industries").val().includes("other")) {
