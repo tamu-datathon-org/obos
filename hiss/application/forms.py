@@ -241,6 +241,7 @@ class ApplicationModelForm(forms.ModelForm):
     covid_status = forms.ChoiceField(
         label="What is your COVID-19 vaccination status?",
         choices=[("", "---------")]+models.VACCINATION_STATUS,
+        required=False
     )
     physical_location = forms.ChoiceField(
         label="If you were to participate virtually, where will you participate from?", choices=STATES
@@ -448,6 +449,7 @@ class ApplicationModelForm(forms.ModelForm):
             "additional_accommodations",
             "physical_location",
             "physical_location_other",
+            "attending_with",
             "majors",
             "minors",
             "classification",

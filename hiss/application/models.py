@@ -456,7 +456,7 @@ class Application(models.Model):
     )
 
     covid_status = models.CharField(
-        "What is your COVID-19 vaccination status?", choices=VACCINATION_STATUS, max_length=24, default=PREFERS_IN_PERSON, blank=True
+        "What is your COVID-19 vaccination status?", choices=VACCINATION_STATUS, max_length=24, default="", blank=True
     )
 
     shirt_size = models.CharField(
@@ -469,6 +469,12 @@ class Application(models.Model):
         "I'd like to apply for travel reimbursement",
         default=False,
         help_text="Travel reimbursement is only provided if you stay the whole time and submit a project.",
+    )
+    attending_with = models.TextField(
+        "If you're planning on attending with other people, please list their full names here.",
+        max_length=1000,
+        help_text="Keep in mind they will also need to apply and fill out this form.",
+        blank=True,
     )
     additional_accommodations = models.TextField(
         "Do you require any special accommodations at the event?",
