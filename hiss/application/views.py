@@ -124,17 +124,13 @@ class DeclineApplicationView(mixins.LoginRequiredMixin, views.View):
         return redirect(reverse_lazy("status"))
 
 
-class GetApplicationsCsvView(views.View):
+class GetApplicationsCsvView(views.View, mixins.LoginRequiredMixin, mixins.UserPassesTestMixin):
     """
     Responds with a CSV of all applications and their information.
-    NOTE: Request should contain Gatekeeper integration secret.
     """
 
+    def test_func(self):
+        return self.request.user.is_staff
+    
     def get(self, request: HttpRequest, *args, **kwargs):
-        if (
-            "HTTP_GATEKEEPER_INTEGRATION" not in request.META
-            or request.META["HTTP_GATEKEEPER_INTEGRATION"]
-            != settings.GATEKEEPER_INTEGRATION_SECRET
-        ):
-            return HttpResponse("Invalid Gatekeeper Integration Secret", status=400)
         return export_applicant_data(None, request, Application.objects.all())
