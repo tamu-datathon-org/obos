@@ -123,14 +123,13 @@ class DeclineApplicationView(mixins.LoginRequiredMixin, views.View):
         app.save()
         return redirect(reverse_lazy("status"))
 
-
-class GetApplicationsCsvView(views.View, mixins.LoginRequiredMixin, mixins.UserPassesTestMixin):
+class GetApplicationsCsvView(mixins.LoginRequiredMixin, mixins.UserPassesTestMixin, views.View):
     """
     Responds with a CSV of all applications and their information.
     """
 
     def test_func(self):
         return self.request.user.is_staff
-    
+
     def get(self, request: HttpRequest, *args, **kwargs):
         return export_applicant_data(None, request, Application.objects.all())
