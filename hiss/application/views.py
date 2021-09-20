@@ -1,6 +1,7 @@
 from django import views
 from django.contrib.auth import mixins
 from django.core.exceptions import PermissionDenied
+from django.core import serializers
 from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
@@ -133,3 +134,17 @@ class GetApplicationsCsvView(mixins.LoginRequiredMixin, mixins.UserPassesTestMix
 
     def get(self, request: HttpRequest, *args, **kwargs):
         return export_applicant_data(None, request, Application.objects.all())
+
+class GetApplicationsJsonView(mixins.LoginRequiredMixin, mixins.UserPassesTestMixin, views.View):
+    """
+    Responds with a CSV of all applications and their information.
+    """
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def get(self, request: HttpRequest, *args, **kwargs):
+        json_resp = serializers.serialize("json", Application.objects.all())
+        response = HttpResponse(json_resp, content_type="application/json")
+
+        return response

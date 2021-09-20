@@ -181,6 +181,7 @@ def export_applicant_data(_modeladmin, _request: HttpRequest, queryset: QuerySet
             "relavent_careers",
             "relavent_industries",
             "other_industries",
+            "shirt_size",
             "github_link",
             "linkedin_link",
             "personal_website_link",
