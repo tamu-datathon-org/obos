@@ -24,7 +24,7 @@ AUTH_PASSWORD_VALIDATORS = [
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 MEDIA_ROOT = "resumes"
 
-AUTH_CHECK_URL = "http://proxy:8080/auth/user"
+AUTH_CHECK_URL = "http://router/auth/user"
 
 URL_ORIGIN = "http://localhost:8080"
 
