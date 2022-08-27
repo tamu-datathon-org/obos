@@ -127,7 +127,7 @@ LOGIN_URL = reverse_lazy("customauth:login")
 AWS_REGION = "us-east-1"
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
-AWS_S3_BUCKET_NAME = "2020-obos-media"
+AWS_S3_BUCKET_NAME = "td-2022-resumes"
 AWS_S3_KEY_PREFIX = "resumes"
 
 STATIC_URL = "/" + BASE_PATHNAME + "static/"
