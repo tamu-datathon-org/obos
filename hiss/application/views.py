@@ -18,6 +18,7 @@ from application.models import (
     STATUS_CONFIRMED,
     STATUS_DECLINED,
     STATUS_ADMITTED,
+    STATUS_ADMITTED_VIRTUAL,
 )
 
 
@@ -91,7 +92,7 @@ class ConfirmApplicationView(mixins.LoginRequiredMixin, views.View):
             raise PermissionDenied(
                 "You don't have permission to view this application."
             )
-        if app.status != STATUS_ADMITTED:
+        if not (app.status == STATUS_ADMITTED or app.status == STATUS_ADMITTED_VIRTUAL):
             raise PermissionDenied(
                 "You can't confirm your application if it hasn't been approved."
             )
@@ -116,7 +117,7 @@ class DeclineApplicationView(mixins.LoginRequiredMixin, views.View):
             raise PermissionDenied(
                 "You don't have permission to view this application."
             )
-        if not (app.status == STATUS_ADMITTED or app.status == STATUS_CONFIRMED):
+        if not (app.status == STATUS_ADMITTED or app.status == STATUS_ADMITTED_VIRTUAL or app.status == STATUS_CONFIRMED):
             raise PermissionDenied(
                 "You can't decline your spot if it hasn't been approved."
             )
