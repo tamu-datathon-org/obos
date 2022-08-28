@@ -272,7 +272,6 @@ class ApplicationAdmin(admin.ModelAdmin):
         "is_adult",
         "location_preference",
         "transport_needed",
-        "travel_reimbursement",
         "dietary_restrictions",
         "gender",
         "age",
@@ -363,7 +362,6 @@ class ApplicationAdmin(admin.ModelAdmin):
                 "fields": [
                     "location_preference",
                     "transport_needed",
-                    "travel_reimbursement",
                     "dietary_restrictions",
                 ]
             },

@@ -465,11 +465,6 @@ class Application(models.Model):
     transport_needed = models.CharField(
         "How will you be getting to the event?", choices=TRANSPORT_MODES, max_length=50, blank=True
     )
-    travel_reimbursement = models.BooleanField(
-        "I'd like to apply for travel reimbursement",
-        default=False,
-        help_text="Travel reimbursement is only provided if you stay the whole time and submit a project.",
-    )
     attending_with = models.TextField(
         "If you're planning on attending with other people, please list their full names here.",
         max_length=1000,

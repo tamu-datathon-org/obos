@@ -444,7 +444,6 @@ class ApplicationModelForm(forms.ModelForm):
             "location_preference",
             "covid_status",
             "transport_needed",
-            "travel_reimbursement",
             "dietary_restrictions",
             "additional_accommodations",
             "physical_location",

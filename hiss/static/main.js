@@ -15,7 +15,7 @@ $(document).ready(function() {
     $("#id_last_name").parent().append(linksHeaderNode);
 
     const indentedInputClass = "indented-input";
-    const linkInputIds = ["id_github_link", "id_linkedin_link", "id_personal_website_link", "id_instagram_link", "id_devpost_link", "id_transport_needed", "id_travel_reimbursement", "id_dietary_restrictions", "id_additional_accommodations", "id_physical_location_other", "id_covid_status"];
+    const linkInputIds = ["id_github_link", "id_linkedin_link", "id_personal_website_link", "id_instagram_link", "id_devpost_link", "id_transport_needed", "id_dietary_restrictions", "id_additional_accommodations", "id_physical_location_other", "id_covid_status"];
     linkInputIds.forEach(id => $(`#${id}`).parent().addClass(indentedInputClass));
 
     if (!$('#id_race input[value="O"]')[0].checked) {
@@ -58,7 +58,6 @@ $(document).ready(function() {
 
     const inPersonQuestions = [
         "#id_transport_needed",
-        "#id_travel_reimbursement",
         "#id_dietary_restrictions",
         "#id_additional_accommodations",
         "#id_covid_status"
