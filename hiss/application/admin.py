@@ -188,6 +188,7 @@ def export_applicant_data(_modeladmin, _request: HttpRequest, queryset: QuerySet
             "instagram_link",
             "devpost_link",
             "resume",
+            "dietary_restrictions",
         ]
     )
     for instance in queryset:
@@ -233,6 +234,7 @@ def export_applicant_data(_modeladmin, _request: HttpRequest, queryset: QuerySet
                 instance.instagram_link,
                 instance.devpost_link,
                 instance.resume.url if instance.resume else "",
+                instance.dietary_restrictions,
             ]
         )
 
